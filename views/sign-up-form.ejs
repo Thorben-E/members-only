@@ -3,18 +3,28 @@
 
 <head>
   <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
   <title></title>
 </head>
 
 <body>
-  <h1>Sign Up</h1>
-  <form action="" method="POST">
-    <label for="username">Username</label>
-    <input name="username" placeholder="username" type="text" />
-    <label for="password">Password</label>
-    <input name="password" type="password" />
-    <button>Sign Up</button>
-  </form>
+  <div class="container mt-4">
+    <h1>Sign Up</h1>
+    <form action="" method="POST">
+      <label for="username" class="form-label">Username</label>
+      <input name="username" class="form-control" placeholder="username" type="text" />
+      <label for="password" class="form-label">Password</label>
+      <input name="password" class="form-control" type="password" placeholder="password" />
+      <label for="passwordConfirmation" class="form-label">Confirm password</label>
+      <input name="passwordConfirmation" class="form-control" type="password" placeholder="password confirmation" />
+      <label for="admin">Check for admin</label>
+      <input type="checkbox" name="admin" id="admin">
+      <br>
+      <button class="btn btn-primary">Sign Up</button>
+    </form>
+    <p>Already have an account? Login <a href="/" class="link">here</a></p>
+  </div>
 </body>
 
 </html>

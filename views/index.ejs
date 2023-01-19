@@ -4,21 +4,55 @@
 <head>
   <meta charset="UTF-8">
   <title>Auth Demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </head>
 
 <body>
-  <% if (locals.currentUser) {%>
-    <h1>WELCOME BACK <%= locals.currentUser.username %>
-    </h1>
+  <div class="container mt-4">
+    <% if (locals.currentUser) {%>
+    <h1>WELCOME BACK <%= locals.currentUser.username %></h1>
+    <h4>Create a message</h3>
+    <form action="/create-message" method="POST">
+      <label for="title" class="form-label">Title</label>
+      <input type="text" name="title" id="title" placeholder="Title..." class="form-control">
+      <label for="message" class="form-label">Message</label>
+      <input type="text" name="message" id="message" placeholder="Message..." class="form-control">
+      <button type="submit" class="btn btn-primary mt-2">Send</button>
+    </form>
     <a href="/log-out">LOG OUT</a>
+    <% if(!member){ %> 
+      <h4>Want to see usernames? Go to the <a href="/membership" class="link">membership</a>.</h4> 
+    <% } %>
+    <% messages.map(message => {%>
+      <form action="/deletemessage/<%=message._id%>" method="POST">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title"><%=message.title%></h2>
+            <span class="card-subtitle">
+              <% if(member){%>
+                <%=message.user%>
+              <% } else {%>
+                NOMEMBER
+              <%}%>
+               at <%=message.timestamp%>
+            </span>
+            <div class="card-text"><%=message.message%></div>
+            <% if (admin) {%>
+              <button type="submit" class="btn btn-primary">Delete</button>
+            <%}%>
+          </div>
+        </div>
+      </form>
+    <%})%>
     <% } else { %>
-      <h1>please log in</h1>
+      <h1>Login to create messages!</h1>
       <form action="/log-in" method="POST">
-        <label for="username">Username</label>
-        <input name="username" placeholder="username" type="text" />
-        <label for="password">Password</label>
-        <input name="password" type="password" />
-        <button>Log In</button>
+        <label for="username" class="form-label">Username</label>
+        <input name="username" class="form-control" placeholder="username" type="text" />
+        <label for="password" class="form-label">Password</label>
+        <input name="password" class="form-control" placeholder="password" type="password" />
+        <button class="btn btn-primary mt-2">Log In</button>
       </form>
       <% if (locals.errorMessage) {%>
         <p>
@@ -28,6 +62,28 @@
 
       <a href="/sign-up">Or sign up.</a>
       <%}%>
+        <% messages.map(message => {%>
+      <form action="/deletemessage/<%=message._id%>" method="POST">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title"><%=message.title%></h2>
+            <span class="card-subtitle">
+              <% if(member){%>
+                <%=message.user%>
+              <% } else {%>
+                NOMEMBER
+              <%}%>
+               at <%=message.timestamp%>
+            </span>
+            <div class="card-text"><%=message.message%></div>
+            <% if (admin) {%>
+              <button type="submit" class="btn btn-primary">Delete</button>
+            <%}%>
+          </div>
+        </div>
+      </form>
+    <%})%>
+  </div>
 </body>
 
 </html>
