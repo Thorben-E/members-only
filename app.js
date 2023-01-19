@@ -5,6 +5,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const mongoose = require("mongoose");
 const morgan = require("morgan");
+const bcrypt = require("bcryptjs");
 require('dotenv').config();
 
 const Schema = mongoose.Schema;
@@ -33,16 +34,23 @@ passport.use(
         return done(err);
       }
 
+
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }
 
-      if (user.password !== password) {
-        return done(null, false, { message: "Incorrect password" });
-      }
+      bcrypt.compare(password, user.password, (err, res) => {
+        if (err) {
+          return done(err);
+        }
 
-      return done(null, user);
-    })
+        if (res) {
+          return done(null, user);
+        }
+
+        return done(null, false, { message: "Incorrect password" });
+      });
+    });
   })
 );
 
@@ -89,16 +97,23 @@ app.get("/log-out", (req, res, next) => {
 });
 
 app.post("/sign-up", (req, res, next) => {
-  new User({
-    username: req.body.username,
-    password: req.body.password
-  }).save((err) => {
+  bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
     if (err) {
-      console.error(err);
-      return next(err);
+      next(err);
     }
-    res.redirect("/");
-  });
+
+    new User({
+      username: req.body.username,
+      password: hashedPassword,
+    }).save((err) => {
+      if (err) {
+        console.error(err);
+        return next(err);
+      }
+
+      res.redirect("/");
+    });
+  })
 });
 
 app.post("/log-in", passport.authenticate("local", {
