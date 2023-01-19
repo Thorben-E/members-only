@@ -7,8 +7,8 @@
 </head>
 
 <body>
-  <% if (user) {%>
-    <h1>WELCOME BACK <%= user.username %>
+  <% if (locals.currentUser) {%>
+    <h1>WELCOME BACK <%= locals.currentUser.username %>
     </h1>
     <a href="/log-out">LOG OUT</a>
     <% } else { %>
@@ -20,6 +20,12 @@
         <input name="password" type="password" />
         <button>Log In</button>
       </form>
+      <% if (locals.errorMessage) {%>
+        <p>
+          <%=locals.errorMessage%>
+        </p>
+      <%}%>
+
       <a href="/sign-up">Or sign up.</a>
       <%}%>
 </body>

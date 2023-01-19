@@ -27,32 +27,32 @@ const User = mongoose.model(
   })
 );
 
-passport.use(
-  new LocalStrategy((username, password, done) => {
-    User.findOne({ username }, (err, user) => {
+const localStrategyCallback = (username, password, done) => {
+  User.findOne({ username }, (err, user) => {
+    if (err) {
+      return done(err);
+    }
+
+
+    if (!user) {
+      return done(null, false, { message: "Incorrect username" });
+    }
+
+    bcrypt.compare(password, user.password, (err, res) => {
       if (err) {
         return done(err);
       }
 
-
-      if (!user) {
-        return done(null, false, { message: "Incorrect username" });
+      if (res) {
+        return done(null, user);
       }
 
-      bcrypt.compare(password, user.password, (err, res) => {
-        if (err) {
-          return done(err);
-        }
-
-        if (res) {
-          return done(null, user);
-        }
-
-        return done(null, false, { message: "Incorrect password" });
-      });
+      return done(null, false, { message: "Incorrect password" });
     });
-  })
-);
+  });
+}
+
+passport.use(new LocalStrategy(localStrategyCallback));
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -79,8 +79,20 @@ app.use((req, res, next) => {
   next();
 });
 
+// ! This takes the session error message Passport added to req.session
+// ! And adds it to res.locals so we can access it in our views
+app.use((req, res, next) => {
+  if (req.session.messages) {
+    res.locals.errorMessage = req.session.messages.at(-1);
+
+    // To see why we're accessing the last index in the `messages` array, try:
+    // console.log(req.session.messages)
+  }
+  next();
+});
+
 app.get("/", (req, res) => {
-  res.render("index", { user: req.user })
+  res.render("index")
 });
 
 app.get("/sign-up", (req, res) => {
@@ -107,7 +119,6 @@ app.post("/sign-up", (req, res, next) => {
       password: hashedPassword,
     }).save((err) => {
       if (err) {
-        console.error(err);
         return next(err);
       }
 
@@ -119,6 +130,11 @@ app.post("/sign-up", (req, res, next) => {
 app.post("/log-in", passport.authenticate("local", {
   successRedirect: "/",
   failureRedirect: "/",
+
+  // It seems like this flag (or `failureFlash`) must be enabled
+  // in order to actually do anything with the error info you pass
+  // as the third argument to `done()` in `localStrategyCallback`
+  failureMessage: true,
 }));
 
 const port = process.env.PORT ?? 3000;
