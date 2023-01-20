@@ -62,6 +62,7 @@
 
       <a href="/sign-up">Or sign up.</a>
       <%}%>
+      <% if(!locals.currentUser) {%>
         <% messages.map(message => {%>
       <form action="/deletemessage/<%=message._id%>" method="POST">
         <div class="card">
@@ -83,6 +84,8 @@
         </div>
       </form>
     <%})%>
+      <% } %>
+        
   </div>
 </body>
 

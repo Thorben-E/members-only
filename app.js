@@ -127,7 +127,7 @@ app.get("/", async (req, res, next) => {
 });
 
 app.get("/sign-up", (req, res) => {
-  res.render("sign-up-form")
+  res.render("sign-up-form", { error: ''})
 });
 
 app.get("/log-out", (req, res, next) => {
@@ -148,14 +148,14 @@ app.post(
 
     return true
   }),
-  (req, res, next) => {
+  async (req, res, next) => {
+    const takenUsername = await User.find({ username: req.body.username })
     const result = validationResult(req)
     if (!result.isEmpty()) {
       return res.status(400).json({ errors: result.array() })
+    } else if (takenUsername.length > 0) {
+      res.render('sign-up-form', { error: 'Username is already in use'})
     }
-
-    
-
     //create user
     bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
       if (err) {
