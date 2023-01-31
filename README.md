@@ -1,5 +1,31 @@
-# Members only
+# Members Only
+> An exclusive club where you can sign up and create messages.
 
-A project made with Node/Express, EJS, and Bootstrap to practice PassportJS. An exclusive club where you can sign up and create messages. After solving a riddle to become a member you see the users of posts. And as admin, you're able to do the same as member, but you can also delete any message.
+### It allows a user to:
 
-live: https://members-only-production-1fe1.up.railway.app/
+ - Create an account
+ - Login with username and password
+ - Create messages
+ - Become a member by solving a riddle
+
+### It allows a member to:
+ - Everything a user can
+ - View posts with usernames
+ 
+### It allows an admin to:
+ - Everything a user can
+ - Delete messages
+
+live preview: https://members-only-production-1fe1.up.railway.app/
+
+## Technologies used:
+**front-end:**
+ - ejs
+ - Bootstrap 5
+ 
+**back-end:**
+ - NodeJS
+ - Express
+ - Mongodb
+ - PassportJS
+ 
