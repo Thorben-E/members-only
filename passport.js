@@ -3,8 +3,8 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const { User } = require('./db')
 
-
-const localStrategyCallback = (username, password, done) => {
+passport.use(new LocalStrategy(function verify(username, password, done) {
+  console.log('localstrat')
   User.findOne({ username }, (err, user) => {
     if (err) {
       return done(err);
@@ -26,9 +26,7 @@ const localStrategyCallback = (username, password, done) => {
       return done(null, false, { message: "Incorrect password" });
     });
   });
-}
-
-passport.use(new LocalStrategy(localStrategyCallback));
+}))
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
