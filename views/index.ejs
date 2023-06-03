@@ -9,84 +9,69 @@
 </head>
 
 <body>
-  <div class="container mt-4">
+  <div class="container mt-4" style="width: 90%; max-width: 600px;">
     <% if (locals.currentUser) {%>
-    <h1>WELCOME BACK <%= locals.currentUser.username %></h1>
-    <h4>Create a message</h3>
-    <form action="/create-message" method="POST">
-      <label for="title" class="form-label">Title</label>
-      <input type="text" name="title" id="title" placeholder="Title..." class="form-control">
-      <label for="message" class="form-label">Message</label>
-      <input type="text" name="message" id="message" placeholder="Message..." class="form-control">
-      <button type="submit" class="btn btn-primary mt-2">Send</button>
-    </form>
-    <a href="/log-out">LOG OUT</a>
-    <% if(!member){ %> 
-      <h4>Want to see usernames? Go to the <a href="/membership" class="link">membership</a>.</h4> 
-    <% } %>
-    <% messages.map(message => {%>
-      <form action="/deletemessage/<%=message._id%>" method="POST">
-        <div class="card">
-          <div class="card-body">
-            <h2 class="card-title"><%=message.title%></h2>
-            <span class="card-subtitle">
-              <% if(member){%>
-                <%=message.user%>
-              <% } else {%>
-                NOMEMBER
-              <%}%>
-               at <%=message.timestamp%>
-            </span>
-            <div class="card-text"><%=message.message%></div>
-            <% if (admin) {%>
-              <button type="submit" class="btn btn-primary">Delete</button>
-            <%}%>
-          </div>
-        </div>
-      </form>
-    <%})%>
-    <% } else { %>
-      <h1>Login to create messages!</h1>
-      <form action="/log-in" method="POST">
-        <label for="username" class="form-label">Username</label>
-        <input name="username" class="form-control" placeholder="username" type="text" />
-        <label for="password" class="form-label">Password</label>
-        <input name="password" class="form-control" placeholder="password" type="password" />
-        <button class="btn btn-primary mt-2">Log In</button>
-      </form>
-      <% if (locals.errorMessage) {%>
-        <p>
-          <%=locals.errorMessage%>
-        </p>
-      <%}%>
+      <nav class="row align-items-center">
+        <h1 class="col">WELCOME BACK <%= locals.currentUser.username %></h1>
+        <a class="col btn btn-danger" href="/log-out">LOG OUT</a>
+      </nav>
+      
+      <% // Login form %>
+      <div class="border">
+        <h4>Create a message</h3>
+        <form action="/create-message" method="POST">
+          <label for="title" class="form-label">Title</label>
+          <input type="text" name="title" id="title" placeholder="Title..." class="form-control">
+          <label for="message" class="form-label">Message</label>
+          <input type="text" name="message" id="message" placeholder="Message..." class="form-control">
+          <button type="submit" class="btn btn-primary mt-2">Send</button>
+        </form>
+      </div>
 
-      <a href="/sign-up">Or sign up.</a>
-      <%}%>
-      <% if(!locals.currentUser) {%>
-        <% messages.map(message => {%>
-      <form action="/deletemessage/<%=message._id%>" method="POST">
-        <div class="card">
-          <div class="card-body">
-            <h2 class="card-title"><%=message.title%></h2>
-            <span class="card-subtitle">
-              <% if(member){%>
-                <%=message.user%>
-              <% } else {%>
-                NOMEMBER
-              <%}%>
-               at <%=message.timestamp%>
-            </span>
-            <div class="card-text"><%=message.message%></div>
-            <% if (admin) {%>
-              <button type="submit" class="btn btn-primary">Delete</button>
-            <%}%>
-          </div>
-        </div>
-      </form>
-    <%})%>
+      <% if(!member){ %> 
+        <h4>Want to see usernames? Go to the <a href="/membership" class="link">membership</a>.</h4> 
       <% } %>
-        
-  </div>
+      <% messages.map(message => {%>
+        <form action="/deletemessage/<%=message._id%>" method="POST">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title"><%=message.title%></h2>
+              <span class="card-subtitle">
+                <% if(member){%>
+                  <%=message.user%> at <%=message.timestamp%>
+                <% } else {%>
+                  <i>Log in to see membername and date</i>
+                <%}%>
+              </span>
+              <div class="card-text"><%=message.message%></div>
+              <% if (admin) {%>
+                <button type="submit" class="btn btn-primary">Delete</button>
+              <%}%>
+            </div>
+          </div>
+        </form>
+      <%})%>
+      <% } else { %>
+        <% // Login screen when not logged in %>
+        <h2>Login to view and create messages!</h2>
+        <form action="/log-in" method="POST">
+          <label for="username" class="form-label">Username</label>
+          <input name="username" class="form-control" placeholder="username" type="text" />
+          <label for="password" class="form-label">Password</label>
+          <input name="password" class="form-control" placeholder="password" type="password" />
+          <div class="row align-items-center">
+            <button class="col-4 btn btn-primary mt-4 ms-2">Log In</button>
+            <a class="col-4" href="/sign-up">Or sign up.</a>
+          </div>
+        </form>
+        <% if (locals.errorMessage) {%>
+          <p>
+            <%=locals.errorMessage%>
+          </p>
+        <%}%>
+
+          <%}%>
+    </div>
 </body>
 
 </html>
