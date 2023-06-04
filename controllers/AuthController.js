@@ -19,7 +19,7 @@ exports.log_out = (req, res, next) => {
 exports.signup_post = [
   body('passwordConfirmation').custom((value, { req }) => {
     if (value !== req.body.password) {
-      throw new Error('Password confirmation does not match password')
+      res.render('sign-up-form', { error: 'Password confirmation does not match password'})
     }
 
     return true

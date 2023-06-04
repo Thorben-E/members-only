@@ -11,20 +11,22 @@
 <body>
   <div class="container mt-4">
     <h1>Sign Up</h1>
-    <p><%= error %></p>
+    <p class="text-danger"><%= error %></p>
     <form action="/sign-up" method="POST">
       <label for="username" class="form-label">Username</label>
-      <input name="username" class="form-control" placeholder="username" type="text" />
+      <input name="username" class="form-control" minlength="8" placeholder="username" type="text" />
       <label for="password" class="form-label">Password</label>
-      <input name="password" class="form-control" type="password" placeholder="password" />
+      <input name="password" class="form-control" type="password" minlength="8" placeholder="password" />
       <label for="passwordConfirmation" class="form-label">Confirm password</label>
-      <input name="passwordConfirmation" class="form-control" type="password" placeholder="password confirmation" />
-      <label for="admin">Check for admin</label>
+      <input name="passwordConfirmation" class="form-control" type="password" minlength="8" placeholder="password confirmation" />
+      <label class="my-2" for="admin">Check for admin</label>
       <input type="checkbox" name="admin" id="admin">
       <br>
-      <button class="btn btn-primary">Sign Up</button>
+      <div class="row align-items-center">
+        <button class="col-4 btn btn-primary">Sign Up</button>
+        <p class="col-6">Already have an account? Login <a href="/" class="link">here</a></p>
+      </div>
     </form>
-    <p>Already have an account? Login <a href="/" class="link">here</a></p>
   </div>
 </body>
 

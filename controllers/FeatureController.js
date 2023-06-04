@@ -25,7 +25,6 @@ exports.main_get = async (req, res, next) => {
 
 exports.create_message_post = (req, res, next) => {
   let yourDate = new Date() 
-  console.log(typeof yourDate.toISOString().split('T')[0], yourDate.toISOString().split('T')[0])
   new Message({
     title: req.body.title,
     message: req.body.message,

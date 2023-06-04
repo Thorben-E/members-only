@@ -4,14 +4,13 @@ const LocalStrategy = require("passport-local").Strategy;
 const { User } = require('./db')
 
 passport.use(new LocalStrategy(function verify(username, password, done) {
-  console.log('localstrat')
   User.findOne({ username }, (err, user) => {
     if (err) {
       return done(err);
     }
 
     if (!user) {
-      return done(null, false, { message: "Incorrect username" });
+      return done(null, false, { message: "No account with that username available" });
     }
 
     bcrypt.compare(password, user.password, (err, res) => {
