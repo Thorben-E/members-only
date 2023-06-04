@@ -62,9 +62,5 @@ exports.signup_post = [
 exports.login = passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/",
-
-    // It seems like this flag (or `failureFlash`) must be enabled
-    // in order to actually do anything with the error info you pass
-    // as the third argument to `done()` in `localStrategyCallback`
     failureMessage: true,
 });
